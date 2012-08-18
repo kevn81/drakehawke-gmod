@@ -258,6 +258,8 @@ void LuaObjectBase::runCallback(const char* functionName, const char* sig, ...)
 		return;
 	int callbackFunction = index->second;
 
+	MLUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
+	MLUA->GetField(-1, "MsgN");
 	MLUA->ReferencePush(callbackFunction);
 #else
 	if (!latestRef())
@@ -324,7 +326,8 @@ void LuaObjectBase::runCallback(const char* functionName, const char* sig, ...)
 		va_end(arguments);
 	}
 
-	MLUA->Call(numArguments, 0);
+	MLUA->PCall(numArguments, 0, -2 - numArguments);
+	MLUA->Pop(); // _G
 }
 
 int LuaObjectBase::getAsObject()
