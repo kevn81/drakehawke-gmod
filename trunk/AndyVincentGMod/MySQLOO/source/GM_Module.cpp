@@ -84,31 +84,32 @@ GMOD_MODULE_OPEN()
 	LuaOO::instance()->registerClasses(state);
 
 	LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
-	LUA->CreateTable();
+		LUA->CreateTable();
 
-		LUA->PushNumber((float)VERSION); LUA->SetField(-2, "VERSION");
-		LUA->PushNumber((float)mysql_get_client_version()); LUA->SetField(-2, "MYSQL_VERSION");
-		LUA->PushString(mysql_get_client_info()); LUA->SetField(-2, "MYSQL_INFO");
+			LUA->PushNumber((float)VERSION); LUA->SetField(-2, "VERSION");
+			LUA->PushNumber((float)mysql_get_client_version()); LUA->SetField(-2, "MYSQL_VERSION");
+			LUA->PushString(mysql_get_client_info()); LUA->SetField(-2, "MYSQL_INFO");
 
-		LUA->PushNumber((float)DATABASE_CONNECTED); LUA->SetField(-2, "DATABASE_CONNECTED");
-		LUA->PushNumber((float)DATABASE_CONNECTING); LUA->SetField(-2, "DATABASE_CONNECTING");
-		LUA->PushNumber((float)DATABASE_NOT_CONNECTED); LUA->SetField(-2, "DATABASE_NOT_CONNECTED");
-		LUA->PushNumber((float)DATABASE_INTERNAL_ERROR); LUA->SetField(-2, "DATABASE_INTERNAL_ERROR");
+			LUA->PushNumber((float)DATABASE_CONNECTED); LUA->SetField(-2, "DATABASE_CONNECTED");
+			LUA->PushNumber((float)DATABASE_CONNECTING); LUA->SetField(-2, "DATABASE_CONNECTING");
+			LUA->PushNumber((float)DATABASE_NOT_CONNECTED); LUA->SetField(-2, "DATABASE_NOT_CONNECTED");
+			LUA->PushNumber((float)DATABASE_INTERNAL_ERROR); LUA->SetField(-2, "DATABASE_INTERNAL_ERROR");
 
-		LUA->PushNumber((float)QUERY_NOT_RUNNING); LUA->SetField(-2, "QUERY_NOT_RUNNING");
-		LUA->PushNumber((float)QUERY_RUNNING); LUA->SetField(-2, "QUERY_RUNNING");
-		LUA->PushNumber((float)QUERY_READING_DATA); LUA->SetField(-2, "QUERY_READING_DATA");
-		LUA->PushNumber((float)QUERY_COMPLETE); LUA->SetField(-2, "QUERY_COMPLETE");
-		LUA->PushNumber((float)QUERY_ABORTED); LUA->SetField(-2, "QUERY_ABORTED");
+			LUA->PushNumber((float)QUERY_NOT_RUNNING); LUA->SetField(-2, "QUERY_NOT_RUNNING");
+			LUA->PushNumber((float)QUERY_RUNNING); LUA->SetField(-2, "QUERY_RUNNING");
+			LUA->PushNumber((float)QUERY_READING_DATA); LUA->SetField(-2, "QUERY_READING_DATA");
+			LUA->PushNumber((float)QUERY_COMPLETE); LUA->SetField(-2, "QUERY_COMPLETE");
+			LUA->PushNumber((float)QUERY_ABORTED); LUA->SetField(-2, "QUERY_ABORTED");
 
-		LUA->PushNumber((float)OPTION_NUMERIC_FIELDS); LUA->SetField(-2, "OPTION_NUMERIC_FIELDS");
-		LUA->PushNumber((float)OPTION_NAMED_FIELDS); LUA->SetField(-2, "OPTION_NAMED_FIELDS");
-		LUA->PushNumber((float)OPTION_INTERPRET_DATA); LUA->SetField(-2, "OPTION_INTERPRET_DATA");
-		LUA->PushNumber((float)OPTION_CACHE); LUA->SetField(-2, "OPTION_CACHE");
+			LUA->PushNumber((float)OPTION_NUMERIC_FIELDS); LUA->SetField(-2, "OPTION_NUMERIC_FIELDS");
+			LUA->PushNumber((float)OPTION_NAMED_FIELDS); LUA->SetField(-2, "OPTION_NAMED_FIELDS");
+			LUA->PushNumber((float)OPTION_INTERPRET_DATA); LUA->SetField(-2, "OPTION_INTERPRET_DATA");
+			LUA->PushNumber((float)OPTION_CACHE); LUA->SetField(-2, "OPTION_CACHE");
 
-		LUA->PushCFunction(DatabaseConnect); LUA->SetField(-2, "connect");
+			LUA->PushCFunction(DatabaseConnect); LUA->SetField(-2, "connect");
 
-	LUA->SetField(-2, "mysqloo");
+		LUA->SetField(-2, "mysqloo");
+	LUA->Pop();
 
 	return 0;
 }
