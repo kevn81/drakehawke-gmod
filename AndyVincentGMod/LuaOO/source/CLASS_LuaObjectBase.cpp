@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <stdarg.h>
+#include <sstream>
 
 LuaObjectBase::LuaObjectBase(const LuaClassInfo& classInfo, lua_State* state)
 	: m_luaState(state)
@@ -68,9 +69,10 @@ void LuaObjectBase::pushObject()
 
 #ifdef FULL_USER_DATA
 	m_gcRefCount++;
-	userdata* ud = (userdata*)MLUA->NewUserdata(sizeof(userdata));
-	ud->obj = this;
-	MLUA->CreateMetaTableType(m_classInfo.className(), m_classInfo.typeId());
+	GarrysMod::Lua::UserData* ud = (GarrysMod::Lua::UserData*)MLUA->NewUserdata(sizeof(GarrysMod::Lua::UserData));
+	ud->data = this;
+	ud->type = m_classInfo.typeId();
+	MLUA->ReferencePush( m_classInfo.m_metatable );
 	MLUA->SetMetaTable(-2);
 #else
 	if (latestRef())
@@ -111,13 +113,16 @@ LuaObjectBase* LuaObjectBase::getFromObject(lua_State* state, int object, bool e
 	if(type != GarrysMod::Lua::Type::USERDATA && type <= GarrysMod::Lua::Type::COUNT)
 	{
 		if (error)
-			LUA->ThrowError( "Invalid object! (not userdata)\n");
+		{
+			LUA->ThrowError( "Invalid object! (not userdata)\n" );
+		}
 		return 0;
 	}
 
 	// Check the object
-	LuaObjectBase* a = (LuaObjectBase*)LUA->GetUserdata(-1);
-	if (!checkValidity(state, type, a, error))
+	GarrysMod::Lua::UserData* a = (GarrysMod::Lua::UserData*)LUA->GetUserdata(-1);
+	LuaObjectBase* data = (LuaObjectBase*)(a->data);
+	if (!checkValidity(state, type, data, error))
 		return 0;
 	
 	// Just a simple cast required
@@ -142,8 +147,8 @@ LuaObjectBase* LuaObjectBase::getFromStack(lua_State* state, int position, bool 
 		return 0;
 
 	// Just a simple cast required
-	userdata* obj = (userdata*)LUA->GetUserdata(position);
-	LuaObjectBase* luaobj = (LuaObjectBase*)(obj->obj);
+	GarrysMod::Lua::UserData* obj = (GarrysMod::Lua::UserData* )LUA->GetUserdata(position);
+	LuaObjectBase* luaobj = (LuaObjectBase*)(obj->data);
 	return luaobj;
 #else
 	ILuaObject* object = luaInterface->GetObject(position);
@@ -214,19 +219,19 @@ bool LuaObjectBase::checkValidity(lua_State* state, int position, bool error)
 {
 #ifdef FULL_USER_DATA
 // Make sure it's some user data!
-	if (LUA->GetType(position) != GarrysMod::Lua::Type::USERDATA && LUA->GetType(position) <= GarrysMod::Lua::Type::COUNT)
+	int type = LUA->GetType(position);
+	if(type != GarrysMod::Lua::Type::USERDATA && type <= GarrysMod::Lua::Type::COUNT)
 	{
 		if (error)
 		{
-			LUA->ThrowError( "Invalid object! (not userdata)\n");
+			LUA->ThrowError( "Invalid object! (not userdata)\n" );
 		}
-		return false;
+		return 0;
 	}
 
 // Acually do the check
-	int type = LUA->GetType(position);
-	userdata* obj = (userdata*)LUA->GetUserdata(position);
-	LuaObjectBase* object = (LuaObjectBase*)obj->obj;
+	GarrysMod::Lua::UserData*  obj = (GarrysMod::Lua::UserData*)LUA->GetUserdata(position);
+	LuaObjectBase* object = (LuaObjectBase*)(obj->data);
 #else
 	ILuaObject* table = luaInterface->GetObject(position);
 	if (!table)

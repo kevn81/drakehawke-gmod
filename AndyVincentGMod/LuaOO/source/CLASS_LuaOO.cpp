@@ -37,7 +37,7 @@ void LuaOO::registerClass(lua_State* state, LuaClassInfo* classInfo)
 
 #ifdef FULL_USER_DATA
 // Make the meta table
-	LUA->CreateMetaTableType(classInfo->className(), classInfo->typeId());
+	LUA->CreateTable();
 
 		LUA->PushCFunction(LuaObjectBase::gcDeleteWrapper);
 		LUA->SetField(-2, "__gc");
@@ -51,7 +51,7 @@ void LuaOO::registerClass(lua_State* state, LuaClassInfo* classInfo)
 		LUA->PushCFunction(LuaObjectBase::newIndexWrapper);
 		LUA->SetField(-2, "__newindex");
 
-	LUA->Pop();
+	classInfo->m_metatable = LUA->ReferenceCreate();
 #endif
 
 // Register the type with our list
@@ -83,7 +83,7 @@ void LuaOO::registerType(LuaClassInfo* classInfo)
 	m_registered.insert(classInfo->typeId());
 }
 
-bool LuaOO::typeRegistered(int typeId)
+bool LuaOO::typeRegistered(unsigned char typeId)
 {
 	std::set<int>::iterator it = m_registered.find(typeId);
 	if (it == m_registered.end())

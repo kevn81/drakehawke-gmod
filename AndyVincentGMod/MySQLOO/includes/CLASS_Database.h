@@ -18,7 +18,7 @@ enum
 };
 
 class Database :
-	public LuaObjectBaseTemplate<Database, 0x781A>
+	public LuaObjectBaseTemplate<Database, 215>
 {
 	LUA_OBJECT
 public:

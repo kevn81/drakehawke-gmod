@@ -47,7 +47,7 @@ public:
 		\brief Check if a type has been registered by ID
 		\param typeID to check for
 	*/
-	bool typeRegistered(int typeID);
+	bool typeRegistered(unsigned char typeID);
 
 	/*!
 		\brief Mark an object as allocated
