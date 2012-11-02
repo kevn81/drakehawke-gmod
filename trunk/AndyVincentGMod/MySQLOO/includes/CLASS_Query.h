@@ -26,7 +26,7 @@ enum
 };
 
 class Query :
-	public LuaObjectBaseTemplate<Query,0x43D2>
+	public LuaObjectBaseTemplate<Query,216>
 {
 	LUA_OBJECT
 public:

@@ -14,8 +14,9 @@ class LuaClassInfo
 {
 public:
 	const char* m_className;
-	int m_typeId;
+	unsigned char m_typeId;
 	std::vector<LuaBoundFunction*> m_functionList;
+	int m_metatable;
 public:
 	/*!
 		\brief Constructor
@@ -23,7 +24,7 @@ public:
 		\param typeId Unique type id.
 		\param functions List of functions.
 	*/
-	LuaClassInfo(const char* className, int typeId, std::vector<LuaBoundFunction*> functions);
+	LuaClassInfo(const char* className, unsigned char typeId, std::vector<LuaBoundFunction*> functions);
 
 	/*!
 		\brief Obtain the class name.
@@ -33,7 +34,7 @@ public:
 	/*!
 		\brief Obtain the type id.
 	*/
-	inline const int typeId() const { return m_typeId; }
+	inline const unsigned char typeId() const { return m_typeId; }
 
 	/*!
 		\brief Obtain the function list.

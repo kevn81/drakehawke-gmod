@@ -5,8 +5,6 @@
 
 #define FULL_USER_DATA
 
-typedef struct{void* obj;} userdata;
-
 #include "CLASS_LuaOO.h"
 #include "CLASS_LuaObjectBase.h"
 #include "CLASS_LuaClassInfo.h"
